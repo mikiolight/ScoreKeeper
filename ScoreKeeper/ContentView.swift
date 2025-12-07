@@ -9,15 +9,17 @@ import SwiftUI
 
 struct ContentView: View {
 	@State private var scoreboard = Scoreboard()
-	private var startingPoint = 0
-
-    var body: some View {
+	@State private var startingPoints = 0
+	
+	var body: some View {
 		VStack(alignment: .leading) {
 			Text("Score Keeper")
 				.font(.title)
 				.bold()
 				.padding(.bottom)
-
+			
+			SettingView(startingPoints: $startingPoints)
+			
 			Grid{
 				GridRow{
 					Text("Player")
@@ -25,7 +27,7 @@ struct ContentView: View {
 					Text("Score")
 				}
 				.font(.headline)
-
+				
 				ForEach($scoreboard.players) { $player in
 					GridRow{
 						TextField("Name", text: $player.name)
@@ -36,18 +38,18 @@ struct ContentView: View {
 				}
 			}
 			.padding(.vertical)
-
+			
 			Button("Add Player", systemImage: "plus") {
 				scoreboard.players.append(Player(name: "", score: 0))
 			}
-
+			
 			Spacer()
-
+			
 			switch scoreboard.state{
 			case .setup:
 				Button("Start Game", systemImage: "play.fill"){
 					scoreboard.state = .playing
-					scoreboard.resetScores(to: startingPoint)
+					scoreboard.resetScores(to: startingPoints)
 				}
 			case .playing:
 				Button("End Game", systemImage: "stop.fill"){
@@ -59,11 +61,11 @@ struct ContentView: View {
 				}
 				
 			}
-        }
-        .padding()
-    }
+		}
+		.padding()
+	}
 }
 
 #Preview {
-    ContentView()
+	ContentView()
 }
